@@ -1,10 +1,18 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/loginPage';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('Login with credentials happy path', {
+  tag: '@Smoke'
+}, async ({ page }) => {
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+
+  await expect(page).toHaveTitle(/Report Portal/);
+
+  await expect(loginPage.loginWithEpamButton).toBeEnabled();
+  
+  await loginPage.loginWithCredentials('test', 'test');
 });
 
 test('get started link', async ({ page }) => {
