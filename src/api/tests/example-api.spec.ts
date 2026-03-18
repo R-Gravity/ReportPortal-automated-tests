@@ -7,9 +7,8 @@ test('Get Test', async ({ request }) => {
   expect(newTest.ok()).toBeTruthy();
 });
 
-
-test('Get Launches', async ({ page }) => {
+test('Get Launches', async ({ request }) => {
   const launchId = (await generateLaunch()).id;
-  const response = await page.request.get(`/launch/${launchId}`);
+  const response = await request.get(`/launch/${launchId}`);
   expect(response.ok()).toBeTruthy();
 });

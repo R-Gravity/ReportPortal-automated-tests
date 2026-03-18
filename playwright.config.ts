@@ -26,7 +26,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'https://rp.epam.com/',
+    baseURL: process.env.BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -34,33 +34,44 @@ export default defineConfig({
 
   projects: [
     {
+      name: 'global setup',
+      testMatch: /global\.setup\.ts/,
+      teardown: 'global teardown',
+    },
+    {
+      name: 'global teardown',
+      testMatch: /global\.teardown\.ts/,
+    },
+    {
       name: 'Smoke',
       grep: /@Smoke/,
       retries: 1,
       use: {
         ...devices['Desktop Chrome'],
-        headless: true,
+        headless: process.env.HEADLESS === 'true',
         screenshot: 'only-on-failure',
         trace: 'on-first-retry',    
-      }
+      },
+      dependencies: ['global setup'],
     },
     {
       name: 'UI-full-regression',
       testMatch: 'src/ui/tests/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        headless: false,
+        headless: process.env.HEADLESS === 'true',
         screenshot: 'only-on-failure',
         trace: 'on-first-retry',    
-      }
+      },
+      dependencies: ['global setup'],
     },
     {
       name: 'api-full-regression',
       testMatch: 'src/api/tests/*.spec.ts',
       use: {
-        ...devices['Desktop Chrome'],
         trace: 'on-first-retry',    
-      }
+      },
+      dependencies: ['global setup'],
     }
   ],
 });
