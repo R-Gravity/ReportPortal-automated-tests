@@ -9,4 +9,3 @@ export async function checkReferenceLink(page: Page, link: Locator, url: string,
         await newPage.close();
     }
 }
-

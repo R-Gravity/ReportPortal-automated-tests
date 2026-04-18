@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { generateLaunch, generateTest } from '../../services/generateTestObjects';
+import { generateLaunch, generateTest } from '../services/generateTestObjects';
 
 test('Get Test', async ({ request }) => {
   const testTestId = (await generateTest()).id;

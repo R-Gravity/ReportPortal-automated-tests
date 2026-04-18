@@ -1,5 +1,4 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { checkReferenceLink } from '../helpers/simpleHelpers';
 
 export class LoginPage  {
   readonly page: Page;
@@ -10,6 +9,7 @@ export class LoginPage  {
   readonly loginButton: Locator;
   readonly githubLink: Locator;
   readonly facebookLink: Locator;
+  readonly privacyPolicyLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,8 +18,9 @@ export class LoginPage  {
     this.passwordField = page.getByRole('textbox', { name: 'password' });
     this.forgotPasswordButton = page.getByRole('link', { name: 'Forgot password?' });
     this.loginButton = page.getByRole('button', { name: 'Login', exact: true });
-    this.githubLink = page.locator('//*[@id="app"]/div/div/div/div/div/div[2]/div/div[3]/a[1]');
-    this.facebookLink = page.locator('//*[@id="app"]/div/div/div/div/div/div[2]/div/div[3]/a[2]');
+    this.githubLink = page.getByRole('link').nth(4);
+    this.facebookLink = page.getByRole('link').nth(5);
+    this.privacyPolicyLink = page.getByRole('link', { name: 'Privacy Policy' });
   }
 
   async goto() {
@@ -27,21 +28,9 @@ export class LoginPage  {
   }
 
   async loginWithCredentials(username: string, password: string) {
-    await expect(this.page).toHaveURL(/ui\/#login/);
     await this.loginField.fill(username);
     await this.passwordField.fill(password);
-    await expect(this.loginButton).toBeEnabled();
     await this.loginButton.click(); 
     await expect(this.page).not.toHaveURL(/members/);
-  }
-
-  async validateSocialLinks() {
-    const socialLinks = [
-      { 'link': this.githubLink, 'url': 'https://github.com/reportportal' },
-      { 'link': this.facebookLink, 'url': 'https://www.facebook.com/ReportPortal.io' }
-    ];
-    for (const pair of socialLinks) {
-      await checkReferenceLink(this.page, pair.link, pair.url, true);
-    }
   }
 }

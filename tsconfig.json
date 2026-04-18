@@ -4,10 +4,11 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node", "@playwright/test"]
   },
-  "types": ["node", "@playwright/test"],
   "include": [
+    "playwright.config.ts",
     "src/**/*.ts",
     "src/**/*.spec.ts"
 ],
